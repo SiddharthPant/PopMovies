@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridView;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
@@ -15,6 +16,8 @@ import java.util.Arrays;
 public class MainActivityFragment extends Fragment {
 
     private MovieImageAdapter imageAdapter;
+
+    private ArrayList<MovieImage> imageList;
 
     MovieImage[] movieImages = {
             new MovieImage(R.drawable.deadpool),
@@ -26,7 +29,23 @@ public class MainActivityFragment extends Fragment {
             new MovieImage(R.drawable.insurgent)
     };
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if(savedInstanceState == null || !savedInstanceState.containsKey("images")) {
+            imageList = new ArrayList<MovieImage>(Arrays.asList(movieImages));
+        } else {
+            imageList = savedInstanceState.getParcelableArrayList("images");
+        }
+    }
+
     public MainActivityFragment() {
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putParcelableArrayList("images", imageList);
+        super.onSaveInstanceState(outState);
     }
 
     @Override
