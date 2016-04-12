@@ -67,20 +67,28 @@ public class MainActivityFragment extends Fragment {
         imageAdapter = new MovieImageAdapter(getActivity(), Arrays.asList(movieImages));
 
         GridView gridView = (GridView) rootView.findViewById(R.id.movie_images_grid);
+        gridView.setOnScrollListener(new EndlessScrollListener() {
+            @Override
+            public boolean onLoadMore(int page, int totalItemCount) {
+                updateMovieData(page);
+                return true;
+            }
+        });
         gridView.setAdapter(imageAdapter);
 
         return rootView;
     }
 
-    private void updateMovieData() {
+    private void updateMovieData(int page) {
         FetchMovieDetailTask movieDetailTask = new FetchMovieDetailTask();
-        movieDetailTask.execute();
+        movieDetailTask.execute(String.valueOf(page));
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        updateMovieData();
+        int firstPage = 1;
+        updateMovieData(firstPage);
     }
 
     public class FetchMovieDetailTask extends AsyncTask<String, Void, String[]> {
@@ -103,9 +111,11 @@ public class MainActivityFragment extends Fragment {
             try {
                 final String TMDB_BASE_URL = "http://api.themoviedb.org/3/discover/movie";
                 final String SORTBY_PARAM = "sort_by";
+                final String PAGE_PARAM = "page";
                 final String APIKEY_PARAM = "api_key";
                 Uri builtUri = Uri.parse(TMDB_BASE_URL).buildUpon()
                         .appendQueryParameter(SORTBY_PARAM, sortMethod)
+                        .appendQueryParameter(PAGE_PARAM, params[0])
                         .appendQueryParameter(APIKEY_PARAM, BuildConfig.THE_MOVIEDB_API_KEY).build();
                 URL url = new URL(builtUri.toString());
                 Log.v(LOG_TAG, "TMDB URL: " + url);
