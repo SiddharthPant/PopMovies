@@ -2,11 +2,14 @@ package com.example.sid.popmovies;
 
 import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+
+import com.bumptech.glide.Glide;
 
 import java.util.List;
 
@@ -30,7 +33,15 @@ public class MovieImageAdapter extends ArrayAdapter<MovieImage> {
         }
 
         ImageView movieImageView = (ImageView) convertView.findViewById(R.id.movie_image);
-        movieImageView.setImageResource(movieImage.image);
+        Log.v(LOG_TAG,"url: " + movieImage.getImageUrl());
+        if (movieImage.getImageUrl() == null)
+            movieImageView.setImageResource(movieImage.image);
+        else
+            Glide
+                .with(getContext())
+                .load(movieImage.getImageUrl())
+                .centerCrop()
+                .into(movieImageView);
 
         return convertView;
     }

@@ -10,7 +10,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridView;
 
+import com.bumptech.glide.Glide;
+
+import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -44,7 +48,7 @@ public class MainActivityFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if(savedInstanceState == null || !savedInstanceState.containsKey("images")) {
-            imageList = new ArrayList<MovieImage>(Arrays.asList(movieImages));
+            imageList = new ArrayList<MovieImage>();
         } else {
             imageList = savedInstanceState.getParcelableArrayList("images");
         }
@@ -64,16 +68,16 @@ public class MainActivityFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView =  inflater.inflate(R.layout.fragment_main, container, false);
 
-        imageAdapter = new MovieImageAdapter(getActivity(), Arrays.asList(movieImages));
+        imageAdapter = new MovieImageAdapter(getActivity(), imageList);
 
         GridView gridView = (GridView) rootView.findViewById(R.id.movie_images_grid);
-        gridView.setOnScrollListener(new EndlessScrollListener() {
-            @Override
-            public boolean onLoadMore(int page, int totalItemCount) {
-                updateMovieData(page);
-                return true;
-            }
-        });
+//        gridView.setOnScrollListener(new EndlessScrollListener() {
+//            @Override
+//            public boolean onLoadMore(int page, int totalItemCount) {
+//                updateMovieData(page);
+//                return true;
+//            }
+//        });
         gridView.setAdapter(imageAdapter);
 
         return rootView;
@@ -95,9 +99,17 @@ public class MainActivityFragment extends Fragment {
 
         private final String LOG_TAG = FetchMovieDetailTask.class.getSimpleName();
 
-        private String[] getMovieImageFromJson(String tmdbJsonStr) throws JSONException {
-            // TODO
-            return null;
+        private String[] getMovieImageUrlFromJson(String tmdbJsonStr) throws JSONException {
+            final String TMDB_RESULTS = "results";
+            final String TMDB_POSTER_PATH = "poster_path";
+            JSONObject tmdbJson = new JSONObject(tmdbJsonStr);
+            JSONArray tmdbResultsArray = tmdbJson.getJSONArray(TMDB_RESULTS);
+            String[] tmdbResults = new String[tmdbResultsArray.length()];
+            for (int i = 0; i < tmdbResultsArray.length(); i++) {
+                JSONObject tmdbResultsObject = tmdbResultsArray.getJSONObject(i);
+                tmdbResults[i] = "http://image.tmdb.org/t/p/w154" + tmdbResultsObject.getString(TMDB_POSTER_PATH);
+            }
+            return tmdbResults;
         }
 
         @Override
@@ -118,7 +130,7 @@ public class MainActivityFragment extends Fragment {
                         .appendQueryParameter(PAGE_PARAM, params[0])
                         .appendQueryParameter(APIKEY_PARAM, BuildConfig.THE_MOVIEDB_API_KEY).build();
                 URL url = new URL(builtUri.toString());
-                Log.v(LOG_TAG, "TMDB URL: " + url);
+//                Log.v(LOG_TAG, "TMDB URL: " + url);
 
                 urlConnection = (HttpURLConnection) url.openConnection();
                 urlConnection.setRequestMethod("GET");
@@ -140,7 +152,7 @@ public class MainActivityFragment extends Fragment {
                     return null;
                 }
                 tmdbJsonStr = buffer.toString();
-                Log.v(LOG_TAG, "TMDB JSON: " + tmdbJsonStr);
+//                Log.v(LOG_TAG, "TMDB JSON: " + tmdbJsonStr);
             } catch (IOException e) {
                 Log.e(LOG_TAG, "Error ", e);
                 return null;
@@ -158,12 +170,24 @@ public class MainActivityFragment extends Fragment {
             }
 
             try {
-                return getMovieImageFromJson(tmdbJsonStr);
+                return getMovieImageUrlFromJson(tmdbJsonStr);
             } catch (JSONException e) {
                 Log.e(LOG_TAG, e.getMessage(), e);
                 e.printStackTrace();
             }
             return null;
+        }
+
+        @Override
+        protected void onPostExecute(String[] tmdbImageUrls) {
+
+            if (tmdbImageUrls != null) {
+                imageAdapter.clear();
+                for (String posterUrl :
+                        tmdbImageUrls) {
+                    imageAdapter.add(new MovieImage(posterUrl));
+                }
+            }
         }
     }
 }
