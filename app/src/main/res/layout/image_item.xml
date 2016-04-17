@@ -7,5 +7,5 @@
         android:layout_height="@dimen/movie_image_height"
         android:scaleType="fitXY"
         android:id="@+id/movie_image"
-        android:layout_gravity="left|top" />
+        android:layout_gravity="start|top" />
 </FrameLayout>

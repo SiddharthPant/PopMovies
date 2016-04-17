@@ -16,13 +16,13 @@ import java.util.List;
 /**
  * Created by sid on 19/3/16.
  */
-public class MovieImageAdapter extends ArrayAdapter<MovieDetail> {
+public class MoviePosterAdapter extends ArrayAdapter<MovieDetail> {
     private Context context;
     private LayoutInflater inflater;
-    private static final String LOG_TAG = MovieImageAdapter.class.getSimpleName();
+    private static final String LOG_TAG = MoviePosterAdapter.class.getSimpleName();
     private List<MovieDetail> movieDetails;
 
-    public MovieImageAdapter(Activity context, List<MovieDetail> movieDetails) {
+    public MoviePosterAdapter(Activity context, List<MovieDetail> movieDetails) {
         super(context, 0, movieDetails);
         this.context = context;
         this.inflater = LayoutInflater.from(context);
@@ -39,10 +39,10 @@ public class MovieImageAdapter extends ArrayAdapter<MovieDetail> {
         }
 
         ImageView movieImageView = (ImageView) convertView.findViewById(R.id.movie_image);
-        Log.v(LOG_TAG,"url: " + movieDetail.getImageUrl());
+//        Log.v(LOG_TAG,movieDetail.toString());
         Glide
             .with(context)
-            .load(movieDetail.getImageUrl())
+            .load(movieDetail.getPosterUrl())
             .centerCrop()
             .into(movieImageView);
 

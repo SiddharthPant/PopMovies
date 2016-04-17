@@ -23,23 +23,24 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A placeholder fragment containing a simple view.
  */
 public class MainActivityFragment extends Fragment {
 
-    private MovieImageAdapter imageAdapter;
+    private MoviePosterAdapter moviePosterAdapter;
 
-    private ArrayList<MovieDetail> imageList;
+    private ArrayList<MovieDetail> movieDetails;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if(savedInstanceState == null || !savedInstanceState.containsKey("images")) {
-            imageList = new ArrayList<MovieDetail>();
+        if(savedInstanceState == null || !savedInstanceState.containsKey("movieDetails")) {
+            movieDetails = new ArrayList<MovieDetail>();
         } else {
-            imageList = savedInstanceState.getParcelableArrayList("images");
+            movieDetails = savedInstanceState.getParcelableArrayList("movieDetails");
         }
     }
 
@@ -48,7 +49,7 @@ public class MainActivityFragment extends Fragment {
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        outState.putParcelableArrayList("images", imageList);
+        outState.putParcelableArrayList("movieDetails", movieDetails);
         super.onSaveInstanceState(outState);
     }
 
@@ -57,7 +58,7 @@ public class MainActivityFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView =  inflater.inflate(R.layout.fragment_main, container, false);
 
-        imageAdapter = new MovieImageAdapter(getActivity(), imageList);
+        moviePosterAdapter = new MoviePosterAdapter(getActivity(), movieDetails);
 
         GridView gridView = (GridView) rootView.findViewById(R.id.movie_images_grid);
         gridView.setOnScrollListener(new EndlessScrollListener() {
@@ -70,11 +71,11 @@ public class MainActivityFragment extends Fragment {
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                MovieDetail movieDetail = imageAdapter.getItem(position);
-                Toast.makeText(getActivity(), movieDetail.getImageUrl(), Toast.LENGTH_SHORT).show();
+                MovieDetail movieDetail = moviePosterAdapter.getItem(position);
+                Toast.makeText(getActivity(), movieDetail.getPosterUrl(), Toast.LENGTH_SHORT).show();
             }
         });
-        gridView.setAdapter(imageAdapter);
+        gridView.setAdapter(moviePosterAdapter);
 
         return rootView;
     }
@@ -91,25 +92,43 @@ public class MainActivityFragment extends Fragment {
         updateMovieData(firstPage);
     }
 
-    public class FetchMovieDetailTask extends AsyncTask<String, Void, String[]> {
+    public class FetchMovieDetailTask extends AsyncTask<String, Void, List<MovieDetail>> {
 
         private final String LOG_TAG = FetchMovieDetailTask.class.getSimpleName();
 
-        private String[] getMovieImageUrlFromJson(String tmdbJsonStr) throws JSONException {
+        private List<MovieDetail> getMovieDetailFromJson(String tmdbJsonStr) throws JSONException {
             final String TMDB_RESULTS = "results";
             final String TMDB_POSTER_PATH = "poster_path";
+            final String TMDB_OVERVIEW = "overview";
+            final String TMDB_RELEASE_DATE = "release_date";
+            final String TMDB_ID = "id";
+            final String TMDB_ORIGINAL_TITLE = "original_title";
+            final String TMDB_TITLE = "title";
+            final String TMDB_BACKDROP_PATH = "backdrop_path";
+            final String TMDB_VOTE_AVERAGE = "vote_average";
             JSONObject tmdbJson = new JSONObject(tmdbJsonStr);
             JSONArray tmdbResultsArray = tmdbJson.getJSONArray(TMDB_RESULTS);
+            List<MovieDetail> movieDetailList = new ArrayList<>();
             String[] tmdbResults = new String[tmdbResultsArray.length()];
             for (int i = 0; i < tmdbResultsArray.length(); i++) {
                 JSONObject tmdbResultsObject = tmdbResultsArray.getJSONObject(i);
-                tmdbResults[i] = "http://image.tmdb.org/t/p/w154" + tmdbResultsObject.getString(TMDB_POSTER_PATH);
+                movieDetailList.add(new MovieDetail(
+                        tmdbResultsObject.getInt(TMDB_ID),
+                        tmdbResultsObject.getString(TMDB_POSTER_PATH),
+                        tmdbResultsObject.getString(TMDB_ORIGINAL_TITLE),
+                        tmdbResultsObject.getString(TMDB_OVERVIEW),
+                        tmdbResultsObject.getDouble(TMDB_VOTE_AVERAGE),
+                        tmdbResultsObject.getString(TMDB_RELEASE_DATE),
+                        tmdbResultsObject.getString(TMDB_BACKDROP_PATH)
+                    )
+                );
+
             }
-            return tmdbResults;
+            return movieDetailList;
         }
 
         @Override
-        protected String[] doInBackground(String... params) {
+        protected List<MovieDetail> doInBackground(String... params) {
             HttpURLConnection urlConnection = null;
             BufferedReader reader = null;
 
@@ -126,7 +145,7 @@ public class MainActivityFragment extends Fragment {
                         .appendQueryParameter(PAGE_PARAM, params[0])
                         .appendQueryParameter(APIKEY_PARAM, BuildConfig.THE_MOVIEDB_API_KEY).build();
                 URL url = new URL(builtUri.toString());
-                Log.v(LOG_TAG, "TMDB URL: " + url);
+//                Log.v(LOG_TAG, "TMDB URL: " + url);
 
                 urlConnection = (HttpURLConnection) url.openConnection();
                 urlConnection.setRequestMethod("GET");
@@ -166,7 +185,7 @@ public class MainActivityFragment extends Fragment {
             }
 
             try {
-                return getMovieImageUrlFromJson(tmdbJsonStr);
+                return getMovieDetailFromJson(tmdbJsonStr);
             } catch (JSONException e) {
                 Log.e(LOG_TAG, e.getMessage(), e);
                 e.printStackTrace();
@@ -175,14 +194,10 @@ public class MainActivityFragment extends Fragment {
         }
 
         @Override
-        protected void onPostExecute(String[] tmdbImageUrls) {
+        protected void onPostExecute(List<MovieDetail> movieDetailList) {
 
-            if (tmdbImageUrls != null) {
-//                imageAdapter.clear();
-                for (String posterUrl :
-                        tmdbImageUrls) {
-                    imageAdapter.add(new MovieDetail(posterUrl));
-                }
+            if (movieDetailList != null) {
+                moviePosterAdapter.addAll(movieDetailList);
             }
         }
     }
