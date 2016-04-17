@@ -34,16 +34,6 @@ public class MainActivityFragment extends Fragment {
 
     private ArrayList<MovieImage> imageList;
 
-    MovieImage[] movieImages = {
-            new MovieImage(R.drawable.deadpool),
-            new MovieImage(R.drawable.hunger_games),
-            new MovieImage(R.drawable.interstellar),
-            new MovieImage(R.drawable.mad_max),
-            new MovieImage(R.drawable.zootopia),
-            new MovieImage(R.drawable.dawn_of_justice),
-            new MovieImage(R.drawable.insurgent)
-    };
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,13 +61,13 @@ public class MainActivityFragment extends Fragment {
         imageAdapter = new MovieImageAdapter(getActivity(), imageList);
 
         GridView gridView = (GridView) rootView.findViewById(R.id.movie_images_grid);
-//        gridView.setOnScrollListener(new EndlessScrollListener() {
-//            @Override
-//            public boolean onLoadMore(int page, int totalItemCount) {
-//                updateMovieData(page);
-//                return true;
-//            }
-//        });
+        gridView.setOnScrollListener(new EndlessScrollListener() {
+            @Override
+            public boolean onLoadMore(int page, int totalItemCount) {
+                updateMovieData(page);
+                return true;
+            }
+        });
         gridView.setAdapter(imageAdapter);
 
         return rootView;
@@ -130,7 +120,7 @@ public class MainActivityFragment extends Fragment {
                         .appendQueryParameter(PAGE_PARAM, params[0])
                         .appendQueryParameter(APIKEY_PARAM, BuildConfig.THE_MOVIEDB_API_KEY).build();
                 URL url = new URL(builtUri.toString());
-//                Log.v(LOG_TAG, "TMDB URL: " + url);
+                Log.v(LOG_TAG, "TMDB URL: " + url);
 
                 urlConnection = (HttpURLConnection) url.openConnection();
                 urlConnection.setRequestMethod("GET");
@@ -182,7 +172,7 @@ public class MainActivityFragment extends Fragment {
         protected void onPostExecute(String[] tmdbImageUrls) {
 
             if (tmdbImageUrls != null) {
-                imageAdapter.clear();
+//                imageAdapter.clear();
                 for (String posterUrl :
                         tmdbImageUrls) {
                     imageAdapter.add(new MovieImage(posterUrl));
