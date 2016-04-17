@@ -12,8 +12,6 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -25,7 +23,6 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -34,13 +31,13 @@ public class MainActivityFragment extends Fragment {
 
     private MovieImageAdapter imageAdapter;
 
-    private ArrayList<MovieImage> imageList;
+    private ArrayList<MovieDetail> imageList;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if(savedInstanceState == null || !savedInstanceState.containsKey("images")) {
-            imageList = new ArrayList<MovieImage>();
+            imageList = new ArrayList<MovieDetail>();
         } else {
             imageList = savedInstanceState.getParcelableArrayList("images");
         }
@@ -73,8 +70,8 @@ public class MainActivityFragment extends Fragment {
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                MovieImage movieImage = imageAdapter.getItem(position);
-                Toast.makeText(getActivity(), movieImage.getImageUrl(), Toast.LENGTH_SHORT).show();
+                MovieDetail movieDetail = imageAdapter.getItem(position);
+                Toast.makeText(getActivity(), movieDetail.getImageUrl(), Toast.LENGTH_SHORT).show();
             }
         });
         gridView.setAdapter(imageAdapter);
@@ -184,7 +181,7 @@ public class MainActivityFragment extends Fragment {
 //                imageAdapter.clear();
                 for (String posterUrl :
                         tmdbImageUrls) {
-                    imageAdapter.add(new MovieImage(posterUrl));
+                    imageAdapter.add(new MovieDetail(posterUrl));
                 }
             }
         }
