@@ -8,7 +8,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
@@ -66,6 +68,13 @@ public class MainActivityFragment extends Fragment {
             public boolean onLoadMore(int page, int totalItemCount) {
                 updateMovieData(page);
                 return true;
+            }
+        });
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                MovieImage movieImage = imageAdapter.getItem(position);
+                Toast.makeText(getActivity(), movieImage.getImageUrl(), Toast.LENGTH_SHORT).show();
             }
         });
         gridView.setAdapter(imageAdapter);

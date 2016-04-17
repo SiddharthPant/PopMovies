@@ -17,10 +17,16 @@ import java.util.List;
  * Created by sid on 19/3/16.
  */
 public class MovieImageAdapter extends ArrayAdapter<MovieImage> {
+    private Context context;
+    private LayoutInflater inflater;
     private static final String LOG_TAG = MovieImageAdapter.class.getSimpleName();
+    private List<MovieImage> movieImages;
 
     public MovieImageAdapter(Activity context, List<MovieImage> movieImages) {
         super(context, 0, movieImages);
+        this.context = context;
+        this.inflater = LayoutInflater.from(context);
+        this.movieImages = movieImages;
     }
 
     @Override
@@ -34,14 +40,11 @@ public class MovieImageAdapter extends ArrayAdapter<MovieImage> {
 
         ImageView movieImageView = (ImageView) convertView.findViewById(R.id.movie_image);
         Log.v(LOG_TAG,"url: " + movieImage.getImageUrl());
-        if (movieImage.getImageUrl() == null)
-            movieImageView.setImageResource(movieImage.image);
-        else
-            Glide
-                .with(getContext())
-                .load(movieImage.getImageUrl())
-                .centerCrop()
-                .into(movieImageView);
+        Glide
+            .with(context)
+            .load(movieImage.getImageUrl())
+            .centerCrop()
+            .into(movieImageView);
 
         return convertView;
     }

@@ -8,11 +8,7 @@ import android.os.Parcelable;
  */
 public class MovieImage implements Parcelable{
     private String imageUrl;
-    int image;
 
-    public MovieImage(int image) {
-        this.image = image;
-    }
     public MovieImage(String imageUrl) {
         this.imageUrl = imageUrl;
     }
