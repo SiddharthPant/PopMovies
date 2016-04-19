@@ -1,5 +1,6 @@
 package com.example.sid.popmovies;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.v4.app.Fragment;
@@ -72,7 +73,9 @@ public class MainActivityFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 MovieDetail movieDetail = moviePosterAdapter.getItem(position);
-                Toast.makeText(getActivity(), movieDetail.getPosterUrl(), Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getActivity(), DetailActivity.class)
+                        .putExtra(Intent.EXTRA_TEXT, movieDetail.toString());
+                startActivity(intent);
             }
         });
         gridView.setAdapter(moviePosterAdapter);
