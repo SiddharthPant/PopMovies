@@ -2,106 +2,112 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.sid.popmovies.DetailActivity$PlaceholderFragment">
+    tools:context=".DetailActivity$DetailFragment">
+    <ScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/scrollView" >
 
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true">
-
-        <ImageView
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/imageView"
-            android:layout_gravity="center_horizontal" />
+            android:layout_height="match_parent"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true">
 
-        <GridLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:columnCount="2"
-            android:textAlignment="center"
-            android:paddingLeft="@dimen/activity_horizontal_margin">
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/imageView"
+                android:layout_gravity="center_horizontal" />
+
+            <GridLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:columnCount="2"
+                android:textAlignment="center"
+                android:paddingLeft="@dimen/activity_horizontal_margin">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="Release Date"
+                    android:id="@+id/releaseDateLabel"
+                    android:layout_gravity="fill"
+                    android:layout_columnWeight="1"
+                    android:textColor="@color/colorPrimaryDark" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="Medium Text"
+                    android:id="@+id/releaseDateText"
+                    android:layout_gravity="fill"
+                    android:layout_columnWeight="1"
+                    android:textColor="@color/abc_primary_text_material_light" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="Runtime"
+                    android:id="@+id/runtimeLabel"
+                    android:layout_gravity="fill"
+                    android:layout_columnWeight="1"
+                    android:textColor="@color/colorPrimaryDark" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="Medium Text"
+                    android:id="@+id/runtimeText"
+                    android:layout_gravity="fill"
+                    android:layout_columnWeight="1"
+                    android:textColor="@color/abc_primary_text_material_light" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="User Rating"
+                    android:id="@+id/userRatingLabel"
+                    android:layout_gravity="fill"
+                    android:layout_columnWeight="1"
+                    android:textColor="@color/colorPrimaryDark" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="Medium Text"
+                    android:id="@+id/userRatingText"
+                    android:layout_gravity="fill"
+                    android:layout_columnWeight="1"
+                    android:textColor="@color/abc_primary_text_material_light" />
+
+
+            </GridLayout>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Release Date"
-                android:id="@+id/releaseDateLabel"
-                android:layout_gravity="fill"
-                android:layout_columnWeight="1"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="Synopsis"
+                android:id="@+id/synopsis"
                 android:textColor="@color/colorPrimaryDark" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Medium Text"
-                android:id="@+id/releaseDateText"
-                android:layout_gravity="fill"
-                android:layout_columnWeight="1"
-                android:textColor="@color/abc_primary_text_material_light" />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Runtime"
-                android:id="@+id/runtimeLabel"
-                android:layout_gravity="fill"
-                android:layout_columnWeight="1"
-                android:textColor="@color/colorPrimaryDark" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Medium Text"
-                android:id="@+id/runtimeText"
-                android:layout_gravity="fill"
-                android:layout_columnWeight="1"
+                android:text="New Text"
+                android:id="@+id/synopsisText"
                 android:textColor="@color/abc_primary_text_material_light" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="User Rating"
-                android:id="@+id/userRatingLabel"
-                android:layout_gravity="fill"
-                android:layout_columnWeight="1"
-                android:textColor="@color/colorPrimaryDark" />
+        </LinearLayout>
+    </ScrollView>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Medium Text"
-                android:id="@+id/userRatingText"
-                android:layout_gravity="fill"
-                android:layout_columnWeight="1"
-                android:textColor="@color/abc_primary_text_material_light" />
-
-
-        </GridLayout>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Synopsis"
-            android:id="@+id/synopsis"
-            android:textColor="@color/colorPrimaryDark" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="New Text"
-            android:id="@+id/synopsisText"
-            android:textColor="@color/abc_primary_text_material_light" />
-
-    </LinearLayout>
 </RelativeLayout>

@@ -2,7 +2,6 @@ package com.example.sid.popmovies;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
@@ -10,7 +9,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
 
 /**
  * Created by sid on 18/4/16.
@@ -22,7 +24,7 @@ public class DetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_detail);
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, new PlaceholderFragment())
+                    .add(R.id.container, new DetailFragment())
                     .commit();
         }
     }
@@ -53,16 +55,38 @@ public class DetailActivity extends AppCompatActivity {
     /**
      * A placeholder fragment containing a simple view.
      */
-    public static class PlaceholderFragment extends Fragment {
+    public static class DetailFragment extends Fragment {
 
-        public PlaceholderFragment() {
+        public DetailFragment() {
         }
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
+            MovieDetail movieDetail = null;
 
             View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
+
+            Intent intent = getActivity().getIntent();
+            if (intent != null && intent.hasExtra("movieDetailObj")) {
+                movieDetail = intent.getParcelableExtra("movieDetailObj");
+            }
+
+            if (movieDetail != null) {
+                getActivity().setTitle(movieDetail.getOriginalTitle());
+                Glide
+                        .with(getActivity())
+                        .load(movieDetail.getBackdropUrl())
+                        .into((ImageView) rootView.findViewById(R.id.imageView));
+                ((TextView) rootView.findViewById(R.id.releaseDateText))
+                        .setText(movieDetail.getReleaseDate().toString());
+                ((TextView) rootView.findViewById(R.id.runtimeText))
+                        .setText(movieDetail.getReleaseDate().toString());
+                ((TextView) rootView.findViewById(R.id.userRatingText))
+                        .setText(movieDetail.getVoteAverage() + "/10");
+                ((TextView) rootView.findViewById(R.id.synopsisText))
+                        .setText(movieDetail.getOverview());
+            }
             return rootView;
         }
     }

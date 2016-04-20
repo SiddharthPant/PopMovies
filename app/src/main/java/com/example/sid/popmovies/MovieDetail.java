@@ -35,7 +35,15 @@ public class MovieDetail implements Parcelable{
     }
 
     private MovieDetail(Parcel in) {
+        id = in.readInt();
         posterUrl = in.readString();
+        originalTitle = in.readString();
+        overview = in.readString();
+        voteAverage = in.readDouble();
+        DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy-MM-dd");
+        releaseDate = LocalDate.parse(in.readString(), formatter);
+        this.backdropUrl = in.readString();
+
     }
 
     @Override
@@ -54,7 +62,7 @@ public class MovieDetail implements Parcelable{
         dest.writeString(backdropUrl);
     }
 
-    public final Parcelable.Creator<MovieDetail> CREATOR = new Parcelable.Creator<MovieDetail>() {
+    public static final Parcelable.Creator<MovieDetail> CREATOR = new Parcelable.Creator<MovieDetail>() {
         @Override
         public MovieDetail createFromParcel(Parcel source) {
             return new MovieDetail(source);
