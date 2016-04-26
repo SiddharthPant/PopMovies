@@ -11,14 +11,14 @@
         android:layout_gravity="center"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        card_view:cardCornerRadius="4dp"
-        android:layout_margin="2dp">
+        card_view:cardCornerRadius="@dimen/card_cornor_radius"
+        android:layout_margin="@dimen/gridlayout_margin_all">
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="@dimen/movie_image_height"
             android:scaleType="fitXY"
             android:id="@+id/movie_image"
-            android:layout_margin="5dp"
+            android:layout_margin="@dimen/layout_margin_all"
             android:layout_gravity="start|top" />
     </android.support.v7.widget.CardView>
 </FrameLayout>
