@@ -74,14 +74,15 @@ public class DetailActivity extends AppCompatActivity {
 
             if (movieDetail != null) {
                 getActivity().setTitle(movieDetail.getOriginalTitle());
+
                 Glide
                         .with(getActivity())
                         .load(movieDetail.getBackdropUrl())
                         .into((ImageView) rootView.findViewById(R.id.imageView));
                 ((TextView) rootView.findViewById(R.id.releaseDateText))
                         .setText(movieDetail.getReleaseDate().toString());
-                ((TextView) rootView.findViewById(R.id.runtimeText))
-                        .setText(movieDetail.getReleaseDate().toString());
+//                ((TextView) rootView.findViewById(R.id.runtimeText))
+//                        .setText(movieDetail.getReleaseDate().toString());
                 ((TextView) rootView.findViewById(R.id.userRatingText))
                         .setText(movieDetail.getVoteAverage() + "/10");
                 ((TextView) rootView.findViewById(R.id.synopsisText))
