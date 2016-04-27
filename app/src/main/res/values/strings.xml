@@ -6,4 +6,7 @@
     <string name="release_date">Release Date</string>
     <string name="user_rating">User Rating</string>
     <string name="title_activity_settings">SettingsActivity</string>
+    <string name="pref_sort_summary">Select how will you like the movies to be sorted</string>
+    <string name="pref_sort_label">Sort By</string>
+    <string name="pref_sort_key">sortBy</string>
 </resources>
