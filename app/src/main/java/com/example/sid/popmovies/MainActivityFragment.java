@@ -1,8 +1,10 @@
 package com.example.sid.popmovies;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
@@ -85,14 +87,17 @@ public class MainActivityFragment extends Fragment {
 
     private void updateMovieData(int page) {
         FetchMovieDetailTask movieDetailTask = new FetchMovieDetailTask();
-        movieDetailTask.execute(String.valueOf(page));
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        String sortBy = prefs.getString(getString(R.string.pref_sort_key),
+                getString(R.string.pref_sort_values_popularity));
+        movieDetailTask.execute(String.valueOf(page), sortBy);
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        int firstPage = 1;
-        updateMovieData(firstPage);
+        final int FIRST_PAGE = 1;
+        updateMovieData(FIRST_PAGE);
     }
 
     public class FetchMovieDetailTask extends AsyncTask<String, Void, List<MovieDetail>> {
@@ -106,13 +111,11 @@ public class MainActivityFragment extends Fragment {
             final String TMDB_RELEASE_DATE = "release_date";
             final String TMDB_ID = "id";
             final String TMDB_ORIGINAL_TITLE = "original_title";
-            final String TMDB_TITLE = "title";
             final String TMDB_BACKDROP_PATH = "backdrop_path";
             final String TMDB_VOTE_AVERAGE = "vote_average";
             JSONObject tmdbJson = new JSONObject(tmdbJsonStr);
             JSONArray tmdbResultsArray = tmdbJson.getJSONArray(TMDB_RESULTS);
             List<MovieDetail> movieDetailList = new ArrayList<>();
-            String[] tmdbResults = new String[tmdbResultsArray.length()];
             for (int i = 0; i < tmdbResultsArray.length(); i++) {
                 JSONObject tmdbResultsObject = tmdbResultsArray.getJSONObject(i);
                 movieDetailList.add(new MovieDetail(
@@ -136,7 +139,7 @@ public class MainActivityFragment extends Fragment {
             BufferedReader reader = null;
 
             String tmdbJsonStr = null;
-            String sortMethod = "popularity.desc";
+            Log.v(LOG_TAG,params[0] + " " + params[1]);
 
             try {
                 final String TMDB_BASE_URL = "http://api.themoviedb.org/3/discover/movie";
@@ -144,7 +147,7 @@ public class MainActivityFragment extends Fragment {
                 final String PAGE_PARAM = "page";
                 final String APIKEY_PARAM = "api_key";
                 Uri builtUri = Uri.parse(TMDB_BASE_URL).buildUpon()
-                        .appendQueryParameter(SORTBY_PARAM, sortMethod)
+                        .appendQueryParameter(SORTBY_PARAM, params[1])
                         .appendQueryParameter(PAGE_PARAM, params[0])
                         .appendQueryParameter(APIKEY_PARAM, BuildConfig.THE_MOVIEDB_API_KEY).build();
                 URL url = new URL(builtUri.toString());

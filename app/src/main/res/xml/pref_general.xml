@@ -7,7 +7,7 @@
         android:title="@string/pref_sort_label"
         android:summary="@string/pref_sort_summary"
         android:key="@string/pref_sort_key"
-        android:defaultValue="1"
+        android:defaultValue="@string/pref_sort_values_popularity"
         android:entries="@array/sortListArray"
         android:entryValues="@array/sortListValues" />
 </PreferenceScreen>
