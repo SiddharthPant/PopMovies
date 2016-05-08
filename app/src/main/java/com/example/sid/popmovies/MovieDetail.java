@@ -3,10 +3,6 @@ package com.example.sid.popmovies;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import org.joda.time.LocalDate;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
-
 /**
  * Created by sid on 19/3/16.
  */
@@ -16,7 +12,7 @@ public class MovieDetail implements Parcelable{
     private String originalTitle;
     private String overview;
     private double voteAverage;
-    private LocalDate releaseDate;
+    private String releaseDate;
     private String backdropUrl;
 
     public MovieDetail(String posterUrl) {
@@ -29,8 +25,9 @@ public class MovieDetail implements Parcelable{
         this.originalTitle = originalTitle;
         this.overview = overview;
         this.voteAverage = voteAverage;
-        DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy-MM-dd");
-        releaseDate = LocalDate.parse(releaseDateStr, formatter);
+//        DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy-MM-dd");
+//        releaseDate = LocalDate.parse(releaseDateStr, formatter);
+        this.releaseDate = releaseDateStr;
         this.backdropUrl = "http://image.tmdb.org/t/p/w500" + backdropUrl;
     }
 
@@ -40,8 +37,9 @@ public class MovieDetail implements Parcelable{
         originalTitle = in.readString();
         overview = in.readString();
         voteAverage = in.readDouble();
-        DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy-MM-dd");
-        releaseDate = LocalDate.parse(in.readString(), formatter);
+//        DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy-MM-dd");
+//        releaseDate = LocalDate.parse(in.readString(), formatter);
+        releaseDate = in.readString();
         this.backdropUrl = in.readString();
 
     }
@@ -58,7 +56,7 @@ public class MovieDetail implements Parcelable{
         dest.writeString(originalTitle);
         dest.writeString(overview);
         dest.writeDouble(voteAverage);
-        dest.writeString(releaseDate.toString());
+        dest.writeString(releaseDate);
         dest.writeString(backdropUrl);
     }
 
@@ -94,7 +92,7 @@ public class MovieDetail implements Parcelable{
         return voteAverage;
     }
 
-    public LocalDate getReleaseDate() {
+    public String getReleaseDate() {
         return releaseDate;
     }
 
@@ -105,6 +103,6 @@ public class MovieDetail implements Parcelable{
     @Override
     public String toString() {
         return id + " " + posterUrl + " " + originalTitle + " " + overview.substring(0, 10) + " " + voteAverage +
-                " " + releaseDate.toString() + " " + backdropUrl;
+                " " + releaseDate + " " + backdropUrl;
     }
 }
