@@ -7,4 +7,5 @@
     <dimen name="card_cornor_radius">4dp</dimen>
     <dimen name="layout_margin_all">5dp</dimen>
     <dimen name="gridlayout_margin_all">2dp</dimen>
+    <dimen name="movie_backdrop_height">200dp</dimen>
 </resources>

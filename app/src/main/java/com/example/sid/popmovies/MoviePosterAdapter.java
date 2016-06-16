@@ -19,7 +19,7 @@ import java.util.List;
 public class MoviePosterAdapter extends ArrayAdapter<MovieDetail> {
     private Context context;
     private LayoutInflater inflater;
-    private static final String LOG_TAG = MoviePosterAdapter.class.getSimpleName();
+    private static final String LOG_TAG = "PopMovies" + MoviePosterAdapter.class.getSimpleName();
     private List<MovieDetail> movieDetails;
 
     public MoviePosterAdapter(Activity context, List<MovieDetail> movieDetails) {
@@ -39,10 +39,11 @@ public class MoviePosterAdapter extends ArrayAdapter<MovieDetail> {
         }
 
         ImageView movieImageView = (ImageView) convertView.findViewById(R.id.movie_image);
-//        Log.v(LOG_TAG,movieDetail.toString());
+//        Log.d(LOG_TAG,movieDetail.toString());
         Glide
             .with(context)
             .load(movieDetail.getPosterUrl())
+            .placeholder(R.drawable.placeholder)
             .centerCrop()
             .into(movieImageView);
 
