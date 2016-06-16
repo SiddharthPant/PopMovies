@@ -44,7 +44,6 @@ public class MoviePosterAdapter extends ArrayAdapter<MovieDetail> {
             .with(context)
             .load(movieDetail.getPosterUrl())
             .placeholder(R.drawable.placeholder)
-            .centerCrop()
             .into(movieImageView);
 
         return convertView;

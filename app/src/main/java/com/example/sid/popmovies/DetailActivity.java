@@ -79,7 +79,7 @@ public class DetailActivity extends AppCompatActivity {
                 Glide
                         .with(getActivity())
                         .load(movieDetail.getBackdropUrl())
-                        .placeholder(R.drawable.placeholder)
+                        .placeholder(R.drawable.placeholder_big)
                         .into((ImageView) rootView.findViewById(R.id.imageView));
                 ((TextView) rootView.findViewById(R.id.releaseDateText))
                         .setText(movieDetail.getReleaseDate().toString());
