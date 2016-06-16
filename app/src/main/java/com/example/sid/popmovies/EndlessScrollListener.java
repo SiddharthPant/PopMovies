@@ -2,15 +2,19 @@ package com.example.sid.popmovies;
 
 import android.widget.AbsListView;
 
+import java.util.ArrayList;
+
 /**
  * Created by sid on 12/4/16.
  */
 public abstract class EndlessScrollListener implements AbsListView.OnScrollListener {
+
     private int visibleThreshold = 4;
-    private int currentPage = 0;
+    private int currentPage = 1;
     private int previousTotalItemCount = 0;
     private boolean loading = true;
     private int startingPageIndex = 0;
+    private int previousPage = 0;
 
     public EndlessScrollListener() {
 
@@ -24,6 +28,18 @@ public abstract class EndlessScrollListener implements AbsListView.OnScrollListe
         this.visibleThreshold = visibleThreshold;
         this.startingPageIndex = startPage;
         this.currentPage = startPage;
+    }
+
+    public int getCurrentPage() {
+        return currentPage;
+    }
+
+    public int getPreviousPage() {
+        return previousPage;
+    }
+
+    public void incrementPreviousPage() {
+        previousPage++;
     }
 
     @Override
@@ -43,7 +59,7 @@ public abstract class EndlessScrollListener implements AbsListView.OnScrollListe
         }
 
         if (!loading && (totalItemCount - visibleItemCount) <= (firstVisibleItem + visibleThreshold)) {
-            loading = onLoadMore(currentPage + 1, totalItemCount);
+            loading = onLoadMore(currentPage, totalItemCount);
         }
     }
 
