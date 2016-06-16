@@ -95,18 +95,11 @@ public class MainActivityFragment extends Fragment implements SharedPreferences.
         return rootView;
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        Log.d(LOG_TAG, "onResume Called!");
-    }
-
     private void updateMovieData(int page) {
         int currentPage = endlessScrollListener.getCurrentPage();
         int count = moviePosterAdapter.getCount();
         final int ITEMS_PER_PAGE = 20;
-        Log.d(LOG_TAG, "updateMovieData called, count:" + count + " currPg: " +
-            currentPage * ITEMS_PER_PAGE);
+//        Log.d(LOG_TAG, "updateMovieData called, count:" + count + " currPg: " + currentPage * ITEMS_PER_PAGE);
         if (count < currentPage * ITEMS_PER_PAGE) {
             FetchMovieDetailTask movieDetailTask = new FetchMovieDetailTask();
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
@@ -120,7 +113,7 @@ public class MainActivityFragment extends Fragment implements SharedPreferences.
 
     @Override
     public void onStart() {
-        Log.d(LOG_TAG, "onStart Called, loading pg " + endlessScrollListener.getCurrentPage());
+//        Log.d(LOG_TAG, "onStart Called, loading pg " + endlessScrollListener.getCurrentPage());
         super.onStart();
         updateMovieData(endlessScrollListener.getCurrentPage());
     }
@@ -167,7 +160,7 @@ public class MainActivityFragment extends Fragment implements SharedPreferences.
             BufferedReader reader = null;
 
             String tmdbJsonStr = null;
-            Log.d(LOG_TAG,params[0] + " " + params[1]);
+//            Log.d(LOG_TAG,params[0] + " " + params[1]);
 
             try {
                 final String TMDB_BASE_URL = "http://api.themoviedb.org/3/discover/movie";
