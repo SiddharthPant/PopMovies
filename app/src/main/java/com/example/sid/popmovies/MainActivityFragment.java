@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Parcelable;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -27,9 +28,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * A placeholder fragment containing a simple view.
- */
 public class MainActivityFragment extends Fragment implements SharedPreferences.OnSharedPreferenceChangeListener {
     private final String LOG_TAG = "PopMovies|" + MainActivityFragment.class.getSimpleName();
 
@@ -43,6 +41,8 @@ public class MainActivityFragment extends Fragment implements SharedPreferences.
     };
 
     private ArrayList<MovieDetail> movieDetails;
+    private GridView gridView;
+    private Parcelable gridInstanceState;
 
 
     @Override
@@ -52,6 +52,9 @@ public class MainActivityFragment extends Fragment implements SharedPreferences.
             movieDetails = new ArrayList<>();
         } else {
             movieDetails = savedInstanceState.getParcelableArrayList("movieDetails");
+            if (gridView != null) {
+                gridInstanceState = savedInstanceState.getParcelable("gridInstanceState");
+            }
         }
     }
 
@@ -61,6 +64,7 @@ public class MainActivityFragment extends Fragment implements SharedPreferences.
     @Override
     public void onSaveInstanceState(Bundle outState) {
         outState.putParcelableArrayList("movieDetails", movieDetails);
+        outState.putParcelable("gridInstanceState", gridView.onSaveInstanceState());
         super.onSaveInstanceState(outState);
     }
 
@@ -79,7 +83,7 @@ public class MainActivityFragment extends Fragment implements SharedPreferences.
 
         moviePosterAdapter = new MoviePosterAdapter(getActivity(), movieDetails);
 
-        GridView gridView = (GridView) rootView.findViewById(R.id.movie_images_grid);
+        gridView = (GridView) rootView.findViewById(R.id.movie_images_grid);
         gridView.setOnScrollListener(endlessScrollListener);
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -91,6 +95,9 @@ public class MainActivityFragment extends Fragment implements SharedPreferences.
             }
         });
         gridView.setAdapter(moviePosterAdapter);
+        if (gridInstanceState != null) {
+            gridView.onRestoreInstanceState(gridInstanceState);
+        }
 
         return rootView;
     }
@@ -100,6 +107,10 @@ public class MainActivityFragment extends Fragment implements SharedPreferences.
         int count = moviePosterAdapter.getCount();
         final int ITEMS_PER_PAGE = 20;
 //        Log.d(LOG_TAG, "updateMovieData called, count:" + count + " currPg: " + currentPage * ITEMS_PER_PAGE);
+        /*
+         *  Check if page is not already loaded by comparing it with total items currently present
+         *  in the adapter
+         */
         if (count < currentPage * ITEMS_PER_PAGE) {
             FetchMovieDetailTask movieDetailTask = new FetchMovieDetailTask();
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
@@ -107,7 +118,6 @@ public class MainActivityFragment extends Fragment implements SharedPreferences.
             String sortBy = prefs.getString(getString(R.string.pref_sort_key),
                     getString(R.string.pref_sort_values_popularity));
             movieDetailTask.execute(String.valueOf(page), sortBy);
-            endlessScrollListener.incrementPreviousPage();
         }
     }
 
@@ -117,8 +127,6 @@ public class MainActivityFragment extends Fragment implements SharedPreferences.
         super.onStart();
         updateMovieData(endlessScrollListener.getCurrentPage());
     }
-
-
 
     public class FetchMovieDetailTask extends AsyncTask<String, Void, List<MovieDetail>> {
 

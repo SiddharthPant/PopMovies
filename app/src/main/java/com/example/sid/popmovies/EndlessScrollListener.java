@@ -14,8 +14,6 @@ public abstract class EndlessScrollListener implements AbsListView.OnScrollListe
     private int previousTotalItemCount = 0;
     private boolean loading = true;
     private int startingPageIndex = 0;
-    private int previousPage = 0;
-
     public EndlessScrollListener() {
 
     }
@@ -32,14 +30,6 @@ public abstract class EndlessScrollListener implements AbsListView.OnScrollListe
 
     public int getCurrentPage() {
         return currentPage;
-    }
-
-    public int getPreviousPage() {
-        return previousPage;
-    }
-
-    public void incrementPreviousPage() {
-        previousPage++;
     }
 
     @Override
