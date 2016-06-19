@@ -159,16 +159,16 @@ public class MainActivityFragment extends Fragment implements SharedPreferences.
 //            Log.d(LOG_TAG,params[0] + " " + params[1]);
 
             try {
-                final String TMDB_BASE_URL = "http://api.themoviedb.org/3/discover/movie";
+                final String TMDB_BASE_URL = "http://api.themoviedb.org/3/movie";
                 final String SORTBY_PARAM = "sort_by";
                 final String PAGE_PARAM = "page";
                 final String APIKEY_PARAM = "api_key";
                 Uri builtUri = Uri.parse(TMDB_BASE_URL).buildUpon()
-                        .appendQueryParameter(SORTBY_PARAM, params[1])
+                        .appendPath(params[1])
                         .appendQueryParameter(PAGE_PARAM, params[0])
                         .appendQueryParameter(APIKEY_PARAM, BuildConfig.THE_MOVIEDB_API_KEY).build();
                 URL url = new URL(builtUri.toString());
-//                Log.d(LOG_TAG, "TMDB URL: " + url);
+                Log.d(LOG_TAG, "TMDB URL: " + url);
 
                 urlConnection = (HttpURLConnection) url.openConnection();
                 urlConnection.setRequestMethod("GET");

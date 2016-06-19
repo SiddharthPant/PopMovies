@@ -11,6 +11,6 @@
     <string name="pref_sort_key" translatable="false">sortBy</string>
     <string name="pref_sort_array_popularity">Popularity</string>
     <string name="pref_sort_array_topRated">Top rated</string>
-    <string name="pref_sort_values_popularity" translatable="false">popularity.desc</string>
-    <string name="pref_sort_values_topRated" translatable="false">vote_average.desc</string>
+    <string name="pref_sort_values_popularity" translatable="false">popular</string>
+    <string name="pref_sort_values_topRated" translatable="false">top_rated</string>
 </resources>
