@@ -23,6 +23,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.ref.SoftReference;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
@@ -41,9 +42,6 @@ public class MainActivityFragment extends Fragment implements SharedPreferences.
     };
 
     private ArrayList<MovieDetail> movieDetails;
-    private GridView gridView;
-    private Parcelable gridInstanceState;
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -52,9 +50,6 @@ public class MainActivityFragment extends Fragment implements SharedPreferences.
             movieDetails = new ArrayList<>();
         } else {
             movieDetails = savedInstanceState.getParcelableArrayList("movieDetails");
-            if (gridView != null) {
-                gridInstanceState = savedInstanceState.getParcelable("gridInstanceState");
-            }
         }
     }
 
@@ -64,7 +59,6 @@ public class MainActivityFragment extends Fragment implements SharedPreferences.
     @Override
     public void onSaveInstanceState(Bundle outState) {
         outState.putParcelableArrayList("movieDetails", movieDetails);
-        outState.putParcelable("gridInstanceState", gridView.onSaveInstanceState());
         super.onSaveInstanceState(outState);
     }
 
@@ -75,15 +69,13 @@ public class MainActivityFragment extends Fragment implements SharedPreferences.
             updateMovieData(1);
         }
     }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView =  inflater.inflate(R.layout.fragment_main, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
         moviePosterAdapter = new MoviePosterAdapter(getActivity(), movieDetails);
-
-        gridView = (GridView) rootView.findViewById(R.id.movie_images_grid);
+        GridView gridView = (GridView) rootView.findViewById(R.id.movie_images_grid);
         gridView.setOnScrollListener(endlessScrollListener);
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -95,10 +87,6 @@ public class MainActivityFragment extends Fragment implements SharedPreferences.
             }
         });
         gridView.setAdapter(moviePosterAdapter);
-        if (gridInstanceState != null) {
-            gridView.onRestoreInstanceState(gridInstanceState);
-        }
-
         return rootView;
     }
 
