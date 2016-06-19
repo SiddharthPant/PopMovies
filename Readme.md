@@ -8,4 +8,4 @@ Include your API key for the build by adding the following line to `[USER_HOME]/
 
     MyTmdbAPIKey="<UNIQUE_API_KEY>"
 
-OR you can also enter it within the project's `gradle.properties` instead of the global one(Included in .gitignore).
+OR you can also enter it within the project's `gradle.properties` instead of the global one
